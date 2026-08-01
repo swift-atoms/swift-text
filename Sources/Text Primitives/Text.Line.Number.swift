@@ -47,14 +47,6 @@ extension Text.Line {
 // MARK: - Int Conversions
 
 extension Text.Line.Number {
-    /// Errors that can occur during line number construction.
-    public enum Error: Swift.Error, Hashable, Sendable {
-        /// The source integer was negative.
-        ///
-        /// - Parameter value: The negative value that was provided.
-        case negativeSource(Int)
-    }
-
     /// Creates a line number from a signed integer, returning `nil` if negative.
     ///
     /// - Parameter value: The signed integer value.

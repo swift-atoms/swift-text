@@ -58,6 +58,12 @@ extension Text {
 #if !hasFeature(Embedded)
     extension Text.Location: Codable {
         @usableFromInline
+        // swift-linter:disable:next single type per file
+        // REASON: `CodingKeys` is the ecosystem-idiomatic name for a Codable
+        // conformance's coding-key enum; moving it to its own file would
+        // either widen its access beyond this conformance's own boundary or
+        // trip the compound-type-name rule on the idiom name itself. Kept
+        // beside the conformance it serves.
         internal enum CodingKeys: Swift.String, CodingKey {
             case line
             case column
@@ -78,6 +84,9 @@ extension Text {
         public func encode(to encoder: any Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(line.underlying, forKey: .line)
+            // swift-linter:disable:next raw value access
+            // REASON: same-package Codable boundary encoding a typed Cardinal
+            // to its raw wire form.
             try container.encode(column.underlying.rawValue, forKey: .column)
         }
     }

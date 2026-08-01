@@ -15,8 +15,12 @@ import Text_Primitives_Test_Support
 
 // MARK: - Text.Position
 
-@Suite("Text.Position")
-struct TextPositionTests {
+@Suite
+struct `Text Position Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+
     @Test
     func `zero is byte offset 0`() {
         let position = Text.Position.zero
@@ -79,8 +83,12 @@ struct TextPositionTests {
 
 // MARK: - Text.Offset
 
-@Suite("Text.Offset")
-struct TextOffsetTests {
+@Suite
+struct `Text Offset Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+
     @Test
     func `zero offset`() {
         #expect(Text.Offset.zero == Text.Offset(0))
@@ -121,6 +129,8 @@ struct TextOffsetTests {
     @Test
     func `vector access`() {
         let offset = Text.Offset(42)
+        // swift-linter:disable:next raw value access
+        // REASON: this test asserts the raw-value boundary itself.
         #expect(offset.vector.rawValue == 42)
     }
 
@@ -133,8 +143,12 @@ struct TextOffsetTests {
 
 // MARK: - Text.Count
 
-@Suite("Text.Count")
-struct TextCountTests {
+@Suite
+struct `Text Count Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+
     @Test
     func `literal construction`() {
         let count: Text.Count = 42
@@ -178,8 +192,12 @@ struct TextCountTests {
 
 // MARK: - Text.Range
 
-@Suite("Text.Range")
-struct TextRangeTests {
+@Suite
+struct `Text Range Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+
     @Test
     func `init from start and end`() {
         let range = Text.Range(start: 10, end: 20)
@@ -260,8 +278,12 @@ struct TextRangeTests {
 
 // MARK: - Text.Line.Number
 
-@Suite("Text.Line.Number")
-struct TextLineNumberTests {
+@Suite
+struct `Text Line Number Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+
     @Test
     func `init from UInt`() {
         let number = Text.Line.Number(1)
@@ -395,8 +417,12 @@ struct TextLineNumberTests {
 
 // MARK: - Text.Location
 
-@Suite("Text.Location")
-struct TextLocationTests {
+@Suite
+struct `Text Location Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+
     @Test
     func `init from line and column`() {
         let location = Text.Location(
@@ -474,8 +500,12 @@ struct TextLocationTests {
 
 // MARK: - Text.Line.Map
 
-@Suite("Text.Line.Map")
-struct TextLineMapTests {
+@Suite
+struct `Text Line Map Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+
     /// Helper: scan a string into a line map.
     private func lineMap(for string: Swift.String) -> Text.Line.Map {
         Text.Line.Map(scanning: string.utf8.map(Byte.init))

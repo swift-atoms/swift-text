@@ -26,12 +26,14 @@ extension Text.Line {
         /// Index 0 is always `Text.Position(0)` (line 1).
         @usableFromInline
         internal let lineStarts: [Text.Position]
+    }
+}
 
-        /// The total number of lines.
-        @inlinable
-        public var lineCount: Int {
-            lineStarts.count
-        }
+extension Text.Line.Map {
+    /// The total number of lines.
+    @inlinable
+    public var lineCount: Int {
+        lineStarts.count
     }
 }
 
@@ -110,6 +112,9 @@ extension Text.Line.Map {
         // swift-format-ignore: NeverUseForceTry
         // swiftlint:disable:next force_try
         let displacement: Text.Offset = try! offset - lineStart
+        // swift-linter:disable:next raw value access
+        // REASON: same-package implementation of Text.Line.Map's own
+        // column-resolution boundary.
         return Text.Line.Column(_unchecked: Cardinal(UInt(displacement.vector.rawValue + 1)))
     }
 
@@ -126,6 +131,9 @@ extension Text.Line.Map {
         // swift-format-ignore: NeverUseForceTry
         // swiftlint:disable:next force_try
         let displacement: Text.Offset = try! offset - lineStart
+        // swift-linter:disable:next raw value access
+        // REASON: same-package implementation of Text.Line.Map's own
+        // column-resolution boundary.
         let column = Text.Line.Column(_unchecked: Cardinal(UInt(displacement.vector.rawValue + 1)))
         return Text.Location(line: lineNumber, column: column)
     }
