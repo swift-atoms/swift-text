@@ -50,11 +50,6 @@ extension Text {
 // `Codable` depends on stdlib protocols and reflection infrastructure that
 // the Embedded mode does not ship.
 //
-// `Codable`'s protocol requirements force existential coder parameters and
-// untyped `throws`; both rules are deliberately exempted for this file's
-// conformance block.
-
-// swiftlint:disable no_any_protocol_existential typed_throws_required
 #if !hasFeature(Embedded)
     extension Text.Location: Codable {
         @usableFromInline
@@ -91,7 +86,6 @@ extension Text {
         }
     }
 #endif
-// swiftlint:enable no_any_protocol_existential typed_throws_required
 
 // MARK: - Comparable
 
