@@ -1,19 +1,6 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-text-primitives open source project
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp and the swift-text-primitives project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 import Byte_Primitives
 import Testing
 import Text_Primitives_Test_Support
-
-// MARK: - Text.Position
 
 @Suite
 struct `Text Position Tests` {
@@ -81,8 +68,6 @@ struct `Text Position Tests` {
     }
 }
 
-// MARK: - Text.Offset
-
 @Suite
 struct `Text Offset Tests` {
     @Suite struct Unit {}
@@ -129,8 +114,7 @@ struct `Text Offset Tests` {
     @Test
     func `vector access`() {
         let offset = Text.Offset(42)
-        // swift-linter:disable:next raw value access
-        // REASON: this test asserts the raw-value boundary itself.
+
         #expect(offset.vector.rawValue == 42)
     }
 
@@ -140,8 +124,6 @@ struct `Text Offset Tests` {
         #expect(Text.Offset(-3).description == "Vector(-3)")
     }
 }
-
-// MARK: - Text.Count
 
 @Suite
 struct `Text Count Tests` {
@@ -189,8 +171,6 @@ struct `Text Count Tests` {
         #expect(count.description == "15")
     }
 }
-
-// MARK: - Text.Range
 
 @Suite
 struct `Text Range Tests` {
@@ -275,8 +255,6 @@ struct `Text Range Tests` {
         #expect(range.end == .zero)
     }
 }
-
-// MARK: - Text.Line.Number
 
 @Suite
 struct `Text Line Number Tests` {
@@ -365,11 +343,9 @@ struct `Text Line Number Tests` {
         #expect(number.description == "42")
     }
 
-    // MARK: Carrier.`Protocol` conformance
-
     @Test
     func `Carrier conformance — Underlying is UInt`() {
-        // Compile-time check: the conformance is declared.
+
         let number: Text.Line.Number = 42
         let carried: UInt = number.underlying
         #expect(carried == 42)
@@ -377,9 +353,7 @@ struct `Text Line Number Tests` {
 
     @Test
     func `Carrier conformance — cross-type generic dispatch`() {
-        // Generic function over any `Carrier.\`Protocol\`<UInt>` accepts
-        // both `Text.Line.Number` and bare `UInt` uniformly. This is the
-        // primary surface the conformance unlocks for Wave 2 consumers.
+
         func extract<C: Carrier.`Protocol`<UInt>>(_ carrier: C) -> UInt {
             carrier.underlying
         }
@@ -393,10 +367,7 @@ struct `Text Line Number Tests` {
 
     @Test
     func `Carrier conformance — validating init`() throws {
-        // The validating init lives on `Carrier.\`Protocol\` where
-        // Self: ~Copyable & ~Escapable` — every Carrier conformer
-        // inherits it for free without declaring a per-domain throwing
-        // init.
+
         enum Validation: Swift.Error, Equatable {
             case rejected
         }
@@ -414,8 +385,6 @@ struct `Text Line Number Tests` {
     }
 
 }
-
-// MARK: - Text.Location
 
 @Suite
 struct `Text Location Tests` {
@@ -498,15 +467,12 @@ struct `Text Location Tests` {
 
 }
 
-// MARK: - Text.Line.Map
-
 @Suite
 struct `Text Line Map Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
 
-    /// Helper: scan a string into a line map.
     private func lineMap(for string: Swift.String) -> Text.Line.Map {
         Text.Line.Map(scanning: string.utf8.map(Byte.init))
     }
@@ -527,18 +493,18 @@ struct `Text Line Map Tests` {
 
     @Test
     func `LF line endings`() {
-        // "a\nb\nc"
+
         let map = lineMap(for: "a\nb\nc")
         #expect(map.lineCount == 3)
-        #expect(map.line(containing: 0) == 1)  // 'a'
-        #expect(map.line(containing: 1) == 1)  // '\n'
-        #expect(map.line(containing: 2) == 2)  // 'b'
-        #expect(map.line(containing: 4) == 3)  // 'c'
+        #expect(map.line(containing: 0) == 1)
+        #expect(map.line(containing: 1) == 1)
+        #expect(map.line(containing: 2) == 2)
+        #expect(map.line(containing: 4) == 3)
     }
 
     @Test
     func `CR line endings`() {
-        // "a\rb\rc"
+
         let map = lineMap(for: "a\rb\rc")
         #expect(map.lineCount == 3)
         #expect(map.line(containing: 0) == 1)
@@ -548,12 +514,12 @@ struct `Text Line Map Tests` {
 
     @Test
     func `CRLF line endings`() {
-        // "a\r\nb\r\nc"
+
         let map = lineMap(for: "a\r\nb\r\nc")
         #expect(map.lineCount == 3)
-        #expect(map.line(containing: 0) == 1)  // 'a'
-        #expect(map.line(containing: 3) == 2)  // 'b'
-        #expect(map.line(containing: 6) == 3)  // 'c'
+        #expect(map.line(containing: 0) == 1)
+        #expect(map.line(containing: 3) == 2)
+        #expect(map.line(containing: 6) == 3)
     }
 
     @Test
@@ -564,23 +530,23 @@ struct `Text Line Map Tests` {
 
     @Test
     func `column computation — 1-based`() {
-        // "abc\ndef"
+
         let map = lineMap(for: "abc\ndef")
-        // 'a' at offset 0 → line 1, column 1
+
         #expect(map.column(for: 0) == 1)
-        // 'c' at offset 2 → line 1, column 3
+
         #expect(map.column(for: 2) == 3)
-        // 'd' at offset 4 → line 2, column 1
+
         #expect(map.column(for: 4) == 1)
-        // 'f' at offset 6 → line 2, column 3
+
         #expect(map.column(for: 6) == 3)
     }
 
     @Test
     func `location composition`() {
-        // "abc\ndef"
+
         let map = lineMap(for: "abc\ndef")
-        let location = map.location(for: 6)  // 'f'
+        let location = map.location(for: 6)
         #expect(location.line == 2)
         #expect(location.column == 3)
         #expect(location.description == "2:3")
@@ -588,7 +554,7 @@ struct `Text Line Map Tests` {
 
     @Test
     func `offset for line — valid`() {
-        // "abc\ndef"
+
         let map = lineMap(for: "abc\ndef")
         #expect(map.offset(forLine: 1) == 0)
         #expect(map.offset(forLine: 2) == 4)
@@ -603,12 +569,12 @@ struct `Text Line Map Tests` {
 
     @Test
     func `mixed line endings`() {
-        // "a\nb\rc\r\nd"
+
         let map = lineMap(for: "a\nb\rc\r\nd")
         #expect(map.lineCount == 4)
-        #expect(map.line(containing: 0) == 1)  // 'a'
-        #expect(map.line(containing: 2) == 2)  // 'b'
-        #expect(map.line(containing: 4) == 3)  // 'c'
-        #expect(map.line(containing: 7) == 4)  // 'd'
+        #expect(map.line(containing: 0) == 1)
+        #expect(map.line(containing: 2) == 2)
+        #expect(map.line(containing: 4) == 3)
+        #expect(map.line(containing: 7) == 4)
     }
 }
