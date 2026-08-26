@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-text-primitives",
+    name: "swift-text",
     platforms: [
         .macOS(.v27),
         .iOS(.v27),
@@ -13,61 +13,61 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "Text Primitives",
-            targets: ["Text Primitives"]
+            name: "Text",
+            targets: ["Text"]
         ),
         .library(
-            name: "Text Primitives Test Support",
-            targets: ["Text Primitives Test Support"]
+            name: "Text Test Support",
+            targets: ["Text Test Support"]
         ),
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-primitives/swift-affine-primitives.git",
+            url: "https://github.com/swift-molecules/swift-affine.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-carrier-primitives.git",
+            url: "https://github.com/swift-molecules/swift-carrier.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-byte-primitives.git",
+            url: "https://github.com/swift-molecules/swift-byte.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-ownership-primitives.git",
+            url: "https://github.com/swift-molecules/swift-ownership.git",
             branch: "main"
         ),
     ],
     targets: [
         .target(
-            name: "Text Primitives",
+            name: "Text",
             dependencies: [
-                .product(name: "Affine Primitives", package: "swift-affine-primitives"),
-                .product(name: "Carrier Primitives", package: "swift-carrier-primitives"),
-                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
+                .product(name: "Affine", package: "swift-affine"),
+                .product(name: "Carrier", package: "swift-carrier"),
+                .product(name: "Byte", package: "swift-byte"),
                 .product(
-                    name: "Ownership Borrow Primitives",
-                    package: "swift-ownership-primitives"
+                    name: "Ownership Borrow",
+                    package: "swift-ownership"
                 ),
             ]
         ),
         .target(
-            name: "Text Primitives Test Support",
+            name: "Text Test Support",
             dependencies: [
-                "Text Primitives",
+                "Text",
                 .product(
-                    name: "Affine Primitives Test Support",
-                    package: "swift-affine-primitives"
+                    name: "Affine Test Support",
+                    package: "swift-affine"
                 ),
-                .product(name: "Carrier Primitives", package: "swift-carrier-primitives"),
+                .product(name: "Carrier", package: "swift-carrier"),
             ],
             path: "Tests/Support"
         ),
         .testTarget(
-            name: "Text Primitives Tests",
+            name: "Text Tests",
             dependencies: [
-                "Text Primitives Test Support"
+                "Text Test Support"
             ]
         ),
     ],

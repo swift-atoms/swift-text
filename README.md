@@ -1,4 +1,4 @@
-# Text Primitives
+# Text
 
 ![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
 
@@ -11,7 +11,7 @@ Text types for Swift — phantom-tagged byte positions, ranges, and line/column 
 `Text` is a phantom namespace over UTF-8 byte offsets. Positions, offsets, and counts are `Tagged` aliases (`Text.Position`, `Text.Offset`, `Text.Count`), so a byte offset into one buffer cannot be mixed with an unrelated quantity — the domain is checked at compile time, and arithmetic is the affine algebra of points, vectors, and magnitudes.
 
 ```swift
-import Text_Primitives
+import Text
 
 // Positions are byte offsets; arithmetic is typed and affine.
 let start: Text.Position = 10
@@ -40,7 +40,7 @@ For streaming lexers that need per-token positions without an eager scan, `Text.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-primitives/swift-text-primitives.git", branch: "main")
+    .package(url: "https://github.com/swift-molecules/swift-text.git", branch: "main")
 ]
 ```
 
@@ -48,7 +48,7 @@ dependencies: [
 .target(
     name: "App",
     dependencies: [
-        .product(name: "Text Primitives", package: "swift-text-primitives"),
+        .product(name: "Text", package: "swift-text"),
     ]
 )
 ```
@@ -63,10 +63,10 @@ Two library products. Foundation-free.
 
 | Product | Target | Purpose |
 |---------|--------|---------|
-| `Text Primitives` | `Sources/Text Primitives/` | The `Text` namespace: `Text.Position` / `Text.Offset` / `Text.Count` (phantom-tagged affine types), `Text.Range`, `Text.Location` (line:column), and `Text.Line` (`Number`, `Column`, `Map`, `Location.Tracker`). |
-| `Text Primitives Test Support` | `Tests/Support/` | Re-exports the main target for test consumers. |
+| `Text` | `Sources/Text/` | The `Text` namespace: `Text.Position` / `Text.Offset` / `Text.Count` (phantom-tagged affine types), `Text.Range`, `Text.Location` (line:column), and `Text.Line` (`Number`, `Column`, `Map`, `Location.Tracker`). |
+| `Text Test Support` | `Tests/Support/` | Re-exports the main target for test consumers. |
 
-Built on `swift-affine-primitives` (ordinals / vectors / cardinals), `swift-carrier-primitives` (`Tagged`), `swift-byte-primitives` (`Byte`), and `swift-ownership-primitives` (borrow view).
+Built on `swift-affine` (ordinals / vectors / cardinals), `swift-carrier` (`Tagged`), `swift-byte` (`Byte`), and `swift-ownership` (borrow view).
 
 ---
 
