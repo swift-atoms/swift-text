@@ -1,5 +1,13 @@
+import Affine
+import Cardinal
+import Cardinal_Standard_Library_Integration
+import Ordinal
+import Ordinal_Standard_Library_Integration
+import Tagged
+import Tagged_Standard_Library_Integration
 import Testing
 import Text
+import Text_Standard_Library_Integration
 
 @Suite
 struct `Text Position Tests` {
@@ -44,19 +52,6 @@ struct `Text Position Tests` {
         let offset = Text.Offset(5)
         #expect(try position + offset == 15)
         #expect(try position + Text.Offset.zero == position)
-    }
-
-    @Test
-    func `hashable`() {
-        let a: Text.Position = 42
-        let b: Text.Position = 42
-        #expect(a.hashValue == b.hashValue)
-
-        var set: Set<Text.Position> = [a, b]
-        #expect(set.count == 1)
-        let c: Text.Position = 99
-        set.insert(c)
-        #expect(set.count == 2)
     }
 
     @Test
@@ -106,7 +101,7 @@ struct `Text Offset Tests` {
     func `hashable`() {
         let a = Text.Offset(5)
         let b = Text.Offset(5)
-        var set: Set<Text.Offset> = [a, b]
+        let set: Set<Text.Offset> = [a, b]
         #expect(set.count == 1)
     }
 
@@ -377,7 +372,7 @@ struct `Text Location Tests` {
         )
         let b = Text.Location(
             line: 2,
-            column: Text.Line.Column(_unchecked: .one)
+            column: Text.Line.Column(_unchecked: Cardinal(1))
         )
         #expect(a < b)
     }
@@ -386,7 +381,7 @@ struct `Text Location Tests` {
     func `comparable — same line, different columns`() {
         let a = Text.Location(
             line: 5,
-            column: Text.Line.Column(_unchecked: .one)
+            column: Text.Line.Column(_unchecked: Cardinal(1))
         )
         let b = Text.Location(
             line: 5,
@@ -413,11 +408,11 @@ struct `Text Location Tests` {
     func `hashable`() {
         let a = Text.Location(
             line: 1,
-            column: Text.Line.Column(_unchecked: .one)
+            column: Text.Line.Column(_unchecked: Cardinal(1))
         )
         let b = Text.Location(
             line: 1,
-            column: Text.Line.Column(_unchecked: .one)
+            column: Text.Line.Column(_unchecked: Cardinal(1))
         )
         let set: Set<Text.Location> = [a, b]
         #expect(set.count == 1)

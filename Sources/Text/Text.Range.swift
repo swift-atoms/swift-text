@@ -1,5 +1,5 @@
-public import Affine
 public import Cardinal
+public import Ordinal
 public import Tagged
 
 extension Text {
@@ -19,8 +19,11 @@ extension Text {
         @inlinable
         public init(start: Text.Position, count: Text.Count) {
             self.start = start
-
-            self.end = try! start + Text.Offset(count)
+            let (end, overflow) = start.underlying.rawValue.addingReportingOverflow(
+                count.underlying.rawValue
+            )
+            precondition(!overflow, "Text range end overflow")
+            self.end = Text.Position(_unchecked: Ordinal(end))
         }
     }
 }
@@ -28,18 +31,35 @@ extension Text {
 extension Text.Range {
 
     @inlinable
-    public var count: Text.Count {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.start == rhs.start && lhs.end == rhs.end
+    }
 
-        try! start.distance.forward(to: end)
+    @inlinable
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(start.underlying.rawValue)
+        hasher.combine(end.underlying.rawValue)
+    }
+}
+
+extension Text.Range {
+
+    @inlinable
+    public var count: Text.Count {
+        precondition(end >= start, "Text range end precedes start")
+        return Text.Count(
+            _unchecked: Cardinal(end.underlying.rawValue - start.underlying.rawValue)
+        )
     }
 
     @inlinable
     public var isEmpty: Bool {
-        start == end
+        start.underlying == end.underlying
     }
 
     @inlinable
     public func contains(_ position: Text.Position) -> Bool {
-        start <= position && position < end
+        let value = position.underlying.rawValue
+        return start.underlying.rawValue <= value && value < end.underlying.rawValue
     }
 }

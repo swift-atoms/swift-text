@@ -1,3 +1,6 @@
+public import Cardinal
+public import Tagged
+
 extension Text {
 
     public struct Location: Sendable, Hashable {
@@ -11,5 +14,19 @@ extension Text {
             self.line = line
             self.column = column
         }
+    }
+}
+
+extension Text.Location {
+
+    @inlinable
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.line == rhs.line && lhs.column == rhs.column
+    }
+
+    @inlinable
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(line.underlying)
+        hasher.combine(column.underlying.rawValue)
     }
 }

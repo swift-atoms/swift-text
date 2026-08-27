@@ -34,7 +34,7 @@ extension Text.Line.Map {
         var high = lineStarts.count
         while low < high {
             let mid = low + (high - low) / 2
-            if lineStarts[mid] <= offset {
+            if lineStarts[mid].underlying <= offset.underlying {
                 low = mid + 1
             } else {
                 high = mid

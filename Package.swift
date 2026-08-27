@@ -58,7 +58,20 @@ let package = Package(
             dependencies: [
                 "Text",
                 .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(
+                    name: "Cardinal Standard Library Integration",
+                    package: "swift-cardinal"
+                ),
+                .product(name: "Ordinal", package: "swift-ordinal"),
+                .product(
+                    name: "Ordinal Standard Library Integration",
+                    package: "swift-ordinal"
+                ),
                 .product(name: "Tagged", package: "swift-tagged"),
+                .product(
+                    name: "Tagged Standard Library Integration",
+                    package: "swift-tagged"
+                ),
             ]
         ),
         .target(
@@ -70,7 +83,26 @@ let package = Package(
         ),
         .testTarget(
             name: "Text Tests",
-            dependencies: ["Text"]
+            dependencies: [
+                "Text",
+                "Text Standard Library Integration",
+                .product(name: "Affine", package: "swift-affine"),
+                .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(
+                    name: "Cardinal Standard Library Integration",
+                    package: "swift-cardinal"
+                ),
+                .product(name: "Ordinal", package: "swift-ordinal"),
+                .product(
+                    name: "Ordinal Standard Library Integration",
+                    package: "swift-ordinal"
+                ),
+                .product(name: "Tagged", package: "swift-tagged"),
+                .product(
+                    name: "Tagged Standard Library Integration",
+                    package: "swift-tagged"
+                ),
+            ]
         ),
     ],
     swiftLanguageModes: [.v6]
