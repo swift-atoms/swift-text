@@ -1,4 +1,7 @@
-public import Byte
+public import Affine
+public import Cardinal
+public import Ordinal
+public import Tagged
 
 extension Text.Line {
 
@@ -6,6 +9,11 @@ extension Text.Line {
 
         @usableFromInline
         internal let lineStarts: [Text.Position]
+
+        @inlinable
+        public init(lineStarts: [Text.Position]) {
+            self.lineStarts = lineStarts
+        }
     }
 }
 
@@ -14,32 +22,6 @@ extension Text.Line.Map {
     @inlinable
     public var lineCount: Int {
         lineStarts.count
-    }
-}
-
-extension Text.Line.Map {
-
-    @inlinable
-    public init(scanning content: [Byte]) {
-        var starts: [Text.Position] = [.zero]
-        var index = 0
-        let count = content.count
-        while index < count {
-            let byte = content[index]
-            if byte == 0x0A {
-
-                starts.append(Text.Position(_unchecked: Ordinal(UInt(index + 1))))
-            } else if byte == 0x0D {
-
-                if content.indices.contains(index + 1) && content[index + 1] == 0x0A {
-
-                    index += 1
-                }
-                starts.append(Text.Position(_unchecked: Ordinal(UInt(index + 1))))
-            }
-            index += 1
-        }
-        self.lineStarts = starts
     }
 }
 

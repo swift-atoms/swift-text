@@ -17,25 +17,29 @@ let package = Package(
             targets: ["Text"]
         ),
         .library(
-            name: "Text Test Support",
-            targets: ["Text Test Support"]
+            name: "Text Standard Library Integration",
+            targets: ["Text Standard Library Integration"]
+        ),
+        .library(
+            name: "Text Apple Foundation Integration",
+            targets: ["Text Apple Foundation Integration"]
         ),
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-molecules/swift-affine.git",
+            url: "https://github.com/swift-atoms/swift-affine.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-carrier.git",
+            url: "https://github.com/swift-atoms/swift-cardinal.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-byte.git",
+            url: "https://github.com/swift-atoms/swift-ordinal.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-ownership.git",
+            url: "https://github.com/swift-atoms/swift-tagged.git",
             branch: "main"
         ),
     ],
@@ -44,31 +48,29 @@ let package = Package(
             name: "Text",
             dependencies: [
                 .product(name: "Affine", package: "swift-affine"),
-                .product(name: "Carrier", package: "swift-carrier"),
-                .product(name: "Byte", package: "swift-byte"),
-                .product(
-                    name: "Ownership Borrow",
-                    package: "swift-ownership"
-                ),
+                .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(name: "Ordinal", package: "swift-ordinal"),
+                .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),
         .target(
-            name: "Text Test Support",
+            name: "Text Standard Library Integration",
             dependencies: [
                 "Text",
-                .product(
-                    name: "Affine Test Support",
-                    package: "swift-affine"
-                ),
-                .product(name: "Carrier", package: "swift-carrier"),
-            ],
-            path: "Tests/Support"
+                .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(name: "Tagged", package: "swift-tagged"),
+            ]
+        ),
+        .target(
+            name: "Text Apple Foundation Integration",
+            dependencies: [
+                "Text",
+                "Text Standard Library Integration",
+            ]
         ),
         .testTarget(
             name: "Text Tests",
-            dependencies: [
-                "Text Test Support"
-            ]
+            dependencies: ["Text"]
         ),
     ],
     swiftLanguageModes: [.v6]

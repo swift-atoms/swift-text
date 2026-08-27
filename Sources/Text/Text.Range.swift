@@ -1,3 +1,7 @@
+public import Affine
+public import Cardinal
+public import Tagged
+
 extension Text {
 
     public struct Range: Sendable, Equatable, Hashable {
@@ -37,13 +41,5 @@ extension Text.Range {
     @inlinable
     public func contains(_ position: Text.Position) -> Bool {
         start <= position && position < end
-    }
-}
-
-extension Text.Range: CustomStringConvertible {
-
-    @inlinable
-    public var description: Swift.String {
-        "\(start)..<\(end)"
     }
 }

@@ -1,3 +1,8 @@
+public import Affine
+public import Cardinal
+public import Ordinal
+public import Tagged
+
 extension Text.Location {
 
     public struct Tracker: Sendable, Equatable, Hashable {
@@ -8,7 +13,7 @@ extension Text.Location {
 
         @inlinable
         public init() {
-            self.line = 1
+            self.line = Text.Line.Number(1)
             self.lineStart = .zero
         }
     }

@@ -24,7 +24,7 @@ range.count            // Text.Count == 15
 range.contains(12)     // true
 ```
 
-Resolve a byte offset to a human-readable `line:column` with a line map. `Text.Line.Map` scans UTF-8 bytes once (recognizing LF, CR, and CRLF) and answers in O(log L):
+Resolve a byte offset to a human-readable `line:column` with a line map. `Text.Line.Map` scans UTF-8 bytes once (recognizing LF, CR, and CRLF) and answers in O(log L). The `Byte`-scanning constructor shown here ships in `swift-text-byte`:
 
 ```swift
 let map = Text.Line.Map(scanning: "ab\ncd\n".utf8.map(Byte.init))
@@ -59,14 +59,15 @@ Requires Swift 6.3.1 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 
 
 ## Architecture
 
-Two library products. Foundation-free.
+Three library products. Foundation-free core.
 
 | Product | Target | Purpose |
 |---------|--------|---------|
 | `Text` | `Sources/Text/` | The `Text` namespace: `Text.Position` / `Text.Offset` / `Text.Count` (phantom-tagged affine types), `Text.Range`, `Text.Location` (line:column), and `Text.Line` (`Number`, `Column`, `Map`, `Location.Tracker`). |
-| `Text Test Support` | `Tests/Support/` | Re-exports the main target for test consumers. |
+| `Text Standard Library Integration` | `Sources/Text Standard Library Integration/` | Swift standard library conformances (`Codable`, `Comparable`, `CustomStringConvertible`, integer literals). |
+| `Text Apple Foundation Integration` | `Sources/Text Apple Foundation Integration/` | Foundation-facing surface; the only module allowed to import Foundation. |
 
-Built on `swift-affine` (ordinals / vectors / cardinals), `swift-carrier` (`Tagged`), `swift-byte` (`Byte`), and `swift-ownership` (borrow view).
+Built on `swift-affine`, `swift-cardinal`, `swift-ordinal`, and `swift-tagged`. Integrations with `swift-byte`, `swift-carrier`, and `swift-ownership` live in `swift-text-byte`, `swift-text-carrier`, and `swift-text-ownership`.
 
 ---
 
