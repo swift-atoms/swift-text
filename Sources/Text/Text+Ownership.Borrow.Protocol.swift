@@ -1,5 +1,5 @@
-public import Byte_Primitives
-public import Ownership_Borrow_Primitives
+public import Byte
+public import Ownership_Borrow
 
 extension Text: Ownership.Borrow.`Protocol` {
 

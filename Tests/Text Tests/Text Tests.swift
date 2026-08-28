@@ -1,6 +1,6 @@
-import Byte_Primitives
+import Byte
 import Testing
-import Text_Primitives_Test_Support
+import Text_Test_Support
 
 @Suite
 struct `Text Position Tests` {
