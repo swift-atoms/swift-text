@@ -23,19 +23,19 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-molecules/swift-affine.git",
+            url: "https://github.com/swift-atoms/swift-affine.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-carrier.git",
+            url: "https://github.com/swift-atoms/swift-carrier.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-byte.git",
+            url: "https://github.com/swift-atoms/swift-byte.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-ownership.git",
+            url: "https://github.com/swift-atoms/swift-ownership.git",
             branch: "main"
         ),
     ],
@@ -55,7 +55,7 @@ let package = Package(
         .target(
             name: "Text Test Support",
             dependencies: [
-                "Text",
+                .target(name: "Text"),
                 .product(
                     name: "Affine Test Support",
                     package: "swift-affine"
@@ -67,7 +67,7 @@ let package = Package(
         .testTarget(
             name: "Text Tests",
             dependencies: [
-                "Text Test Support"
+                .target(name: "Text Test Support")
             ]
         ),
     ],

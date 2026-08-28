@@ -1,4 +1,4 @@
-# Text
+# Text Primitives
 
 ![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
 
@@ -40,7 +40,7 @@ For streaming lexers that need per-token positions without an eager scan, `Text.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-molecules/swift-text.git", branch: "main")
+    .package(url: "https://github.com/swift-atoms/swift-text.git", branch: "main")
 ]
 ```
 
@@ -63,7 +63,7 @@ Two library products. Foundation-free.
 
 | Product | Target | Purpose |
 |---------|--------|---------|
-| `Text` | `Sources/Text/` | The `Text` namespace: `Text.Position` / `Text.Offset` / `Text.Count` (phantom-tagged affine types), `Text.Range`, `Text.Location` (line:column), and `Text.Line` (`Number`, `Column`, `Map`, `Location.Tracker`). |
+| `Text Primitives` | `Sources/Text Primitives/` | The `Text` namespace: `Text.Position` / `Text.Offset` / `Text.Count` (phantom-tagged affine types), `Text.Range`, `Text.Location` (line:column), and `Text.Line` (`Number`, `Column`, `Map`, `Location.Tracker`). |
 | `Text Test Support` | `Tests/Support/` | Re-exports the main target for test consumers. |
 
 Built on `swift-affine` (ordinals / vectors / cardinals), `swift-carrier` (`Tagged`), `swift-byte` (`Byte`), and `swift-ownership` (borrow view).
