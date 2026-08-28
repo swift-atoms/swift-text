@@ -1,13 +1,6 @@
-import Affine
-import Cardinal
-import Cardinal_Standard_Library_Integration
-import Ordinal
-import Ordinal_Standard_Library_Integration
-import Tagged
-import Tagged_Standard_Library_Integration
+import Byte
 import Testing
-import Text
-import Text_Standard_Library_Integration
+import Text_Test_Support
 
 @Suite
 struct `Text Position Tests` {
@@ -52,6 +45,19 @@ struct `Text Position Tests` {
         let offset = Text.Offset(5)
         #expect(try position + offset == 15)
         #expect(try position + Text.Offset.zero == position)
+    }
+
+    @Test
+    func `hashable`() {
+        let a: Text.Position = 42
+        let b: Text.Position = 42
+        #expect(a.hashValue == b.hashValue)
+
+        var set: Set<Text.Position> = [a, b]
+        #expect(set.count == 1)
+        let c: Text.Position = 99
+        set.insert(c)
+        #expect(set.count == 2)
     }
 
     @Test
@@ -101,7 +107,7 @@ struct `Text Offset Tests` {
     func `hashable`() {
         let a = Text.Offset(5)
         let b = Text.Offset(5)
-        let set: Set<Text.Offset> = [a, b]
+        var set: Set<Text.Offset> = [a, b]
         #expect(set.count == 1)
     }
 
@@ -337,6 +343,47 @@ struct `Text Line Number Tests` {
         #expect(number.description == "42")
     }
 
+    @Test
+    func `Carrier conformance — Underlying is UInt`() {
+
+        let number: Text.Line.Number = 42
+        let carried: UInt = number.underlying
+        #expect(carried == 42)
+    }
+
+    @Test
+    func `Carrier conformance — cross-type generic dispatch`() {
+
+        func extract<C: Carrier.`Protocol`<UInt>>(_ carrier: C) -> UInt {
+            carrier.underlying
+        }
+
+        let number: Text.Line.Number = 42
+        #expect(extract(number) == 42)
+
+        let raw: UInt = 42
+        #expect(extract(raw) == 42)
+    }
+
+    @Test
+    func `Carrier conformance — validating init`() throws {
+
+        enum Validation: Swift.Error, Equatable {
+            case rejected
+        }
+
+        let valid = try Text.Line.Number(42) { (raw: borrowing UInt) throws(Validation) in
+            if raw == 0 { throw .rejected }
+        }
+        #expect(valid.underlying == 42)
+
+        #expect(throws: Validation.rejected) {
+            try Text.Line.Number(0) { (raw: borrowing UInt) throws(Validation) in
+                if raw == 0 { throw .rejected }
+            }
+        }
+    }
+
 }
 
 @Suite
@@ -372,7 +419,7 @@ struct `Text Location Tests` {
         )
         let b = Text.Location(
             line: 2,
-            column: Text.Line.Column(_unchecked: Cardinal(1))
+            column: Text.Line.Column(_unchecked: .one)
         )
         #expect(a < b)
     }
@@ -381,7 +428,7 @@ struct `Text Location Tests` {
     func `comparable — same line, different columns`() {
         let a = Text.Location(
             line: 5,
-            column: Text.Line.Column(_unchecked: Cardinal(1))
+            column: Text.Line.Column(_unchecked: .one)
         )
         let b = Text.Location(
             line: 5,
@@ -408,14 +455,126 @@ struct `Text Location Tests` {
     func `hashable`() {
         let a = Text.Location(
             line: 1,
-            column: Text.Line.Column(_unchecked: Cardinal(1))
+            column: Text.Line.Column(_unchecked: .one)
         )
         let b = Text.Location(
             line: 1,
-            column: Text.Line.Column(_unchecked: Cardinal(1))
+            column: Text.Line.Column(_unchecked: .one)
         )
         let set: Set<Text.Location> = [a, b]
         #expect(set.count == 1)
     }
 
+}
+
+@Suite
+struct `Text Line Map Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+
+    private func lineMap(for string: Swift.String) -> Text.Line.Map {
+        Text.Line.Map(scanning: string.utf8.map(Byte.init))
+    }
+
+    @Test
+    func `empty content — one line`() {
+        let map = lineMap(for: "")
+        #expect(map.lineCount == 1)
+    }
+
+    @Test
+    func `single line — no newline`() {
+        let map = lineMap(for: "hello")
+        #expect(map.lineCount == 1)
+        #expect(map.line(containing: 0) == 1)
+        #expect(map.line(containing: 4) == 1)
+    }
+
+    @Test
+    func `LF line endings`() {
+
+        let map = lineMap(for: "a\nb\nc")
+        #expect(map.lineCount == 3)
+        #expect(map.line(containing: 0) == 1)
+        #expect(map.line(containing: 1) == 1)
+        #expect(map.line(containing: 2) == 2)
+        #expect(map.line(containing: 4) == 3)
+    }
+
+    @Test
+    func `CR line endings`() {
+
+        let map = lineMap(for: "a\rb\rc")
+        #expect(map.lineCount == 3)
+        #expect(map.line(containing: 0) == 1)
+        #expect(map.line(containing: 2) == 2)
+        #expect(map.line(containing: 4) == 3)
+    }
+
+    @Test
+    func `CRLF line endings`() {
+
+        let map = lineMap(for: "a\r\nb\r\nc")
+        #expect(map.lineCount == 3)
+        #expect(map.line(containing: 0) == 1)
+        #expect(map.line(containing: 3) == 2)
+        #expect(map.line(containing: 6) == 3)
+    }
+
+    @Test
+    func `trailing newline adds empty line`() {
+        let map = lineMap(for: "a\n")
+        #expect(map.lineCount == 2)
+    }
+
+    @Test
+    func `column computation — 1-based`() {
+
+        let map = lineMap(for: "abc\ndef")
+
+        #expect(map.column(for: 0) == 1)
+
+        #expect(map.column(for: 2) == 3)
+
+        #expect(map.column(for: 4) == 1)
+
+        #expect(map.column(for: 6) == 3)
+    }
+
+    @Test
+    func `location composition`() {
+
+        let map = lineMap(for: "abc\ndef")
+        let location = map.location(for: 6)
+        #expect(location.line == 2)
+        #expect(location.column == 3)
+        #expect(location.description == "2:3")
+    }
+
+    @Test
+    func `offset for line — valid`() {
+
+        let map = lineMap(for: "abc\ndef")
+        #expect(map.offset(forLine: 1) == 0)
+        #expect(map.offset(forLine: 2) == 4)
+    }
+
+    @Test
+    func `offset for line — out of range`() {
+        let map = lineMap(for: "abc")
+        #expect(map.offset(forLine: 0) == nil)
+        #expect(map.offset(forLine: 2) == nil)
+    }
+
+    @Test
+    func `mixed line endings`() {
+
+        let map = lineMap(for: "a\nb\rc\r\nd")
+        #expect(map.lineCount == 4)
+        #expect(map.line(containing: 0) == 1)
+        #expect(map.line(containing: 2) == 2)
+        #expect(map.line(containing: 4) == 3)
+        #expect(map.line(containing: 7) == 4)
+    }
 }

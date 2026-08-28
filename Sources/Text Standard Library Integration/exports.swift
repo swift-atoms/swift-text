@@ -1,4 +1,0 @@
-@_exported public import Cardinal_Standard_Library_Integration
-@_exported public import Ordinal_Standard_Library_Integration
-@_exported public import Tagged_Standard_Library_Integration
-@_exported public import Text

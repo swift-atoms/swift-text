@@ -1,7 +1,3 @@
-public import Cardinal
-public import Ordinal
-public import Tagged
-
 extension Text.Location {
 
     public struct Tracker: Sendable, Equatable, Hashable {
@@ -12,23 +8,9 @@ extension Text.Location {
 
         @inlinable
         public init() {
-            self.line = Text.Line.Number(UInt(1))
-            self.lineStart = Text.Position(_unchecked: .zero)
+            self.line = 1
+            self.lineStart = .zero
         }
-    }
-}
-
-extension Text.Location.Tracker {
-
-    @inlinable
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.line == rhs.line && lhs.lineStart == rhs.lineStart
-    }
-
-    @inlinable
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(line.underlying)
-        hasher.combine(lineStart.underlying.rawValue)
     }
 }
 
@@ -37,7 +19,7 @@ extension Text.Location.Tracker {
     @inlinable
     public mutating func newline(at position: Text.Position) {
         line = Text.Line.Number(line.underlying + 1)
-        lineStart = try! position + Text.Offset(1)
+        lineStart = position + .one
     }
 }
 
@@ -47,10 +29,8 @@ extension Text.Location.Tracker {
     public func location(at cursor: Text.Position) -> Text.Location {
 
         let offset: Text.Offset = try! cursor - lineStart
-        let bytes = try! Text.Count(offset)
-        let column = Text.Line.Column(
-            _unchecked: Cardinal(bytes.underlying.rawValue + 1)
-        )
+        let bytes: Text.Count = offset.magnitude
+        let column: Text.Line.Column = bytes + .one
         return Text.Location(line: line, column: column)
     }
 }

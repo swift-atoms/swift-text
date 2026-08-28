@@ -1,6 +1,6 @@
 extension Text.Line {
 
-    public struct Number: Sendable, Hashable {
+    public struct Number: Sendable, Hashable, Comparable {
 
         public let underlying: UInt
 
@@ -10,6 +10,10 @@ extension Text.Line {
         }
     }
 }
+
+#if !hasFeature(Embedded)
+    extension Text.Line.Number: Codable {}
+#endif
 
 extension Text.Line.Number {
 
@@ -25,5 +29,30 @@ extension Text.Line.Number {
             throw .negativeSource(value)
         }
         self.init(UInt(value))
+    }
+}
+
+extension Text.Line.Number: ExpressibleByIntegerLiteral {
+
+    @_disfavoredOverload
+    @inlinable
+    public init(integerLiteral value: UInt) {
+        self.init(value)
+    }
+}
+
+extension Text.Line.Number {
+
+    @inlinable
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.underlying < rhs.underlying
+    }
+}
+
+extension Text.Line.Number: CustomStringConvertible {
+
+    @inlinable
+    public var description: Swift.String {
+        "\(underlying)"
     }
 }
