@@ -31,10 +31,6 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-atoms/swift-byte.git",
-            branch: "main"
-        ),
-        .package(
             url: "https://github.com/swift-atoms/swift-ordinal.git",
             branch: "main"
         ),
@@ -53,7 +49,6 @@ let package = Package(
                 .product(name: "Affine Tagged", package: "swift-affine"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
                 .product(name: "Cardinal Carrier", package: "swift-cardinal"),
-                .product(name: "Byte", package: "swift-byte"),
                 .product(name: "Ordinal", package: "swift-ordinal"),
                 .product(name: "Ordinal Protocol", package: "swift-ordinal"),
                 .product(name: "Ordinal Distance", package: "swift-ordinal"),

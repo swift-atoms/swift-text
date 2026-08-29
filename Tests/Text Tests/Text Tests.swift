@@ -1,4 +1,3 @@
-import Byte
 import Testing
 import Text_Test_Support
 
@@ -432,8 +431,8 @@ struct `Text Line Map Tests` {
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
 
-    private func lineMap(for string: Swift.String) -> Text.Line.Map {
-        Text.Line.Map(scanning: string.utf8.map(Byte.init))
+    private func lineMap(_ lineStarts: [Text.Position]) -> Text.Line.Map {
+        Text.Line.Map(validatingLineStarts: lineStarts)!
     }
 
     @Test
@@ -459,60 +458,9 @@ struct `Text Line Map Tests` {
     }
 
     @Test
-    func `empty content — one line`() {
-        let map = lineMap(for: "")
-        #expect(map.lineCount == 1)
-    }
-
-    @Test
-    func `single line — no newline`() {
-        let map = lineMap(for: "hello")
-        #expect(map.lineCount == 1)
-        #expect(map.line(containing: 0) == 1)
-        #expect(map.line(containing: 4) == 1)
-    }
-
-    @Test
-    func `LF line endings`() {
-
-        let map = lineMap(for: "a\nb\nc")
-        #expect(map.lineCount == 3)
-        #expect(map.line(containing: 0) == 1)
-        #expect(map.line(containing: 1) == 1)
-        #expect(map.line(containing: 2) == 2)
-        #expect(map.line(containing: 4) == 3)
-    }
-
-    @Test
-    func `CR line endings`() {
-
-        let map = lineMap(for: "a\rb\rc")
-        #expect(map.lineCount == 3)
-        #expect(map.line(containing: 0) == 1)
-        #expect(map.line(containing: 2) == 2)
-        #expect(map.line(containing: 4) == 3)
-    }
-
-    @Test
-    func `CRLF line endings`() {
-
-        let map = lineMap(for: "a\r\nb\r\nc")
-        #expect(map.lineCount == 3)
-        #expect(map.line(containing: 0) == 1)
-        #expect(map.line(containing: 3) == 2)
-        #expect(map.line(containing: 6) == 3)
-    }
-
-    @Test
-    func `trailing newline adds empty line`() {
-        let map = lineMap(for: "a\n")
-        #expect(map.lineCount == 2)
-    }
-
-    @Test
     func `column computation — 1-based`() {
 
-        let map = lineMap(for: "abc\ndef")
+        let map = lineMap([0, 4])
 
         #expect(map.column(for: 0) == 1)
 
@@ -526,7 +474,7 @@ struct `Text Line Map Tests` {
     @Test
     func `location composition`() {
 
-        let map = lineMap(for: "abc\ndef")
+        let map = lineMap([0, 4])
         let location = map.location(for: 6)
         #expect(location.line == 2)
         #expect(location.column == 3)
@@ -536,26 +484,16 @@ struct `Text Line Map Tests` {
     @Test
     func `offset for line — valid`() {
 
-        let map = lineMap(for: "abc\ndef")
+        let map = lineMap([0, 4])
         #expect(map.offset(forLine: 1) == 0)
         #expect(map.offset(forLine: 2) == 4)
     }
 
     @Test
     func `offset for line — out of range`() {
-        let map = lineMap(for: "abc")
+        let map = lineMap([.zero])
         #expect(map.offset(forLine: 0) == nil)
         #expect(map.offset(forLine: 2) == nil)
     }
 
-    @Test
-    func `mixed line endings`() {
-
-        let map = lineMap(for: "a\nb\rc\r\nd")
-        #expect(map.lineCount == 4)
-        #expect(map.line(containing: 0) == 1)
-        #expect(map.line(containing: 2) == 2)
-        #expect(map.line(containing: 4) == 3)
-        #expect(map.line(containing: 7) == 4)
-    }
 }
