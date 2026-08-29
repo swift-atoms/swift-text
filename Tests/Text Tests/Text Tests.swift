@@ -1,3 +1,14 @@
+import Affine_Arithmetic
+import Affine_Carrier
+import Affine_Discrete
+import Affine_Tagged
+import Cardinal
+import Cardinal_Carrier
+import Ordinal
+import Ordinal_Distance
+import Ordinal_Protocol
+import Ordinal_Tagged
+import Tagged
 import Testing
 import Text_Test_Support
 

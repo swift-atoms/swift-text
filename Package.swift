@@ -74,7 +74,19 @@ let package = Package(
         .testTarget(
             name: "Text Tests",
             dependencies: [
-                .target(name: "Text Test Support")
+                .target(name: "Text"),
+                .target(name: "Text Test Support"),
+                .product(name: "Affine Discrete", package: "swift-affine"),
+                .product(name: "Affine Carrier", package: "swift-affine"),
+                .product(name: "Affine Arithmetic", package: "swift-affine"),
+                .product(name: "Affine Tagged", package: "swift-affine"),
+                .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(name: "Cardinal Carrier", package: "swift-cardinal"),
+                .product(name: "Ordinal", package: "swift-ordinal"),
+                .product(name: "Ordinal Protocol", package: "swift-ordinal"),
+                .product(name: "Ordinal Distance", package: "swift-ordinal"),
+                .product(name: "Ordinal Tagged", package: "swift-ordinal"),
+                .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),
     ],
