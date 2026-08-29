@@ -1,4 +1,12 @@
+public import Affine_Carrier
+public import Affine_Discrete
+public import Affine_Tagged
 public import Byte
+public import Cardinal
+public import Ordinal
+public import Ordinal_Protocol
+public import Ordinal_Tagged
+public import Tagged
 
 extension Text.Line {
 
@@ -6,6 +14,22 @@ extension Text.Line {
 
         @usableFromInline
         internal let lineStarts: [Text.Position]
+    }
+}
+
+extension Text.Line.Map {
+
+    @inlinable
+    public init?(validatingLineStarts lineStarts: [Text.Position]) {
+        guard let first = lineStarts.first, first == .zero else { return nil }
+
+        var previous = first
+        for start in lineStarts.dropFirst() {
+            guard previous < start else { return nil }
+            previous = start
+        }
+
+        self.lineStarts = lineStarts
     }
 }
 
@@ -26,12 +50,14 @@ extension Text.Line.Map {
         let count = content.count
         while index < count {
             let byte = content[index]
-            if byte == 0x0A {
+            if byte.underlying == 0x0A {
 
                 starts.append(Text.Position(_unchecked: Ordinal(UInt(index + 1))))
-            } else if byte == 0x0D {
+            } else if byte.underlying == 0x0D {
 
-                if content.indices.contains(index + 1) && content[index + 1] == 0x0A {
+                if content.indices.contains(index + 1)
+                    && content[index + 1].underlying == 0x0A
+                {
 
                     index += 1
                 }

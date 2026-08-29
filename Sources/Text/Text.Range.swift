@@ -1,3 +1,10 @@
+public import Affine_Arithmetic
+public import Affine_Tagged
+public import Ordinal
+public import Ordinal_Distance
+public import Ordinal_Protocol
+public import Tagged
+
 extension Text {
 
     public struct Range: Sendable, Equatable, Hashable {

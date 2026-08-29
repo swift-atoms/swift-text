@@ -478,6 +478,28 @@ struct `Text Line Map Tests` {
     }
 
     @Test
+    func `validated line starts preserve typed positions`() throws {
+        let map = try #require(Text.Line.Map(validatingLineStarts: [.zero, 4, 9]))
+
+        #expect(map.lineCount == 3)
+        #expect(map.offset(forLine: 1) == Text.Position.zero)
+        #expect(map.offset(forLine: 2) == Text.Position(4))
+        #expect(map.offset(forLine: 3) == Text.Position(9))
+    }
+
+    @Test(
+        arguments: [
+            [] as [Text.Position],
+            [1],
+            [0, 4, 4],
+            [0, 5, 3],
+        ]
+    )
+    func `invalid line starts are rejected`(_ lineStarts: [Text.Position]) {
+        #expect(Text.Line.Map(validatingLineStarts: lineStarts) == nil)
+    }
+
+    @Test
     func `empty content — one line`() {
         let map = lineMap(for: "")
         #expect(map.lineCount == 1)

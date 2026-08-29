@@ -1,3 +1,11 @@
+public import Affine_Carrier
+public import Affine_Arithmetic
+public import Affine_Tagged
+public import Cardinal_Carrier
+public import Ordinal_Tagged
+public import Ordinal_Protocol
+public import Tagged
+
 extension Text.Location {
 
     public struct Tracker: Sendable, Equatable, Hashable {
@@ -19,7 +27,7 @@ extension Text.Location.Tracker {
     @inlinable
     public mutating func newline(at position: Text.Position) {
         line = Text.Line.Number(line.underlying + 1)
-        lineStart = position + .one
+        lineStart = try! position + Text.Offset.one
     }
 }
 
@@ -30,7 +38,7 @@ extension Text.Location.Tracker {
 
         let offset: Text.Offset = try! cursor - lineStart
         let bytes: Text.Count = offset.magnitude
-        let column: Text.Line.Column = bytes + .one
+        let column: Text.Line.Column = bytes + Text.Count.one
         return Text.Location(line: line, column: column)
     }
 }

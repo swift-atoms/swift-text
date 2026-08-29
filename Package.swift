@@ -27,6 +27,10 @@ let package = Package(
             branch: "main"
         ),
         .package(
+            url: "https://github.com/swift-atoms/swift-cardinal.git",
+            branch: "main"
+        ),
+        .package(
             url: "https://github.com/swift-atoms/swift-carrier.git",
             branch: "main"
         ),
@@ -38,18 +42,37 @@ let package = Package(
             url: "https://github.com/swift-atoms/swift-ownership.git",
             branch: "main"
         ),
+        .package(
+            url: "https://github.com/swift-atoms/swift-ordinal.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-atoms/swift-tagged.git",
+            branch: "main"
+        ),
     ],
     targets: [
         .target(
             name: "Text",
             dependencies: [
-                .product(name: "Affine", package: "swift-affine"),
+                .product(name: "Affine Discrete", package: "swift-affine"),
+                .product(name: "Affine Carrier", package: "swift-affine"),
+                .product(name: "Affine Arithmetic", package: "swift-affine"),
+                .product(name: "Affine Tagged", package: "swift-affine"),
+                .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(name: "Cardinal Carrier", package: "swift-cardinal"),
                 .product(name: "Carrier", package: "swift-carrier"),
+                .product(name: "Carrier Protocol", package: "swift-carrier"),
                 .product(name: "Byte", package: "swift-byte"),
                 .product(
                     name: "Ownership Borrow",
                     package: "swift-ownership"
                 ),
+                .product(name: "Ordinal", package: "swift-ordinal"),
+                .product(name: "Ordinal Protocol", package: "swift-ordinal"),
+                .product(name: "Ordinal Distance", package: "swift-ordinal"),
+                .product(name: "Ordinal Tagged", package: "swift-ordinal"),
+                .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),
         .target(

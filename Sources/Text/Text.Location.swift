@@ -1,3 +1,6 @@
+public import Cardinal
+public import Tagged
+
 extension Text {
 
     public struct Location: Sendable, Hashable {
