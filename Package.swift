@@ -61,8 +61,12 @@ let package = Package(
             dependencies: [
                 .target(name: "Text"),
                 .product(
-                    name: "Affine Test Support",
-                    package: "swift-affine"
+                    name: "Cardinal Standard Library Integration",
+                    package: "swift-cardinal"
+                ),
+                .product(
+                    name: "Tagged Standard Library Integration",
+                    package: "swift-tagged"
                 ),
             ],
             path: "Tests/Support"

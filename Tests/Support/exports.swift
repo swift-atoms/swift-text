@@ -1,2 +1,3 @@
-@_exported public import Affine_Test_Support
+@_exported public import Cardinal_Standard_Library_Integration
+@_exported public import Tagged_Standard_Library_Integration
 @_exported public import Text
