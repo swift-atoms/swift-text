@@ -31,10 +31,6 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-atoms/swift-carrier.git",
-            branch: "main"
-        ),
-        .package(
             url: "https://github.com/swift-atoms/swift-byte.git",
             branch: "main"
         ),
@@ -61,8 +57,6 @@ let package = Package(
                 .product(name: "Affine Tagged", package: "swift-affine"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
                 .product(name: "Cardinal Carrier", package: "swift-cardinal"),
-                .product(name: "Carrier", package: "swift-carrier"),
-                .product(name: "Carrier Protocol", package: "swift-carrier"),
                 .product(name: "Byte", package: "swift-byte"),
                 .product(
                     name: "Ownership Borrow",
@@ -83,7 +77,6 @@ let package = Package(
                     name: "Affine Test Support",
                     package: "swift-affine"
                 ),
-                .product(name: "Carrier", package: "swift-carrier"),
             ],
             path: "Tests/Support"
         ),

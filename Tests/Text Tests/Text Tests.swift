@@ -343,47 +343,6 @@ struct `Text Line Number Tests` {
         #expect(number.description == "42")
     }
 
-    @Test
-    func `Carrier conformance — Underlying is UInt`() {
-
-        let number: Text.Line.Number = 42
-        let carried: UInt = number.underlying
-        #expect(carried == 42)
-    }
-
-    @Test
-    func `Carrier conformance — cross-type generic dispatch`() {
-
-        func extract<C: Carrier.`Protocol`<UInt>>(_ carrier: C) -> UInt {
-            carrier.underlying
-        }
-
-        let number: Text.Line.Number = 42
-        #expect(extract(number) == 42)
-
-        let raw: UInt = 42
-        #expect(extract(raw) == 42)
-    }
-
-    @Test
-    func `Carrier conformance — validating init`() throws {
-
-        enum Validation: Swift.Error, Equatable {
-            case rejected
-        }
-
-        let valid = try Text.Line.Number(42) { (raw: borrowing UInt) throws(Validation) in
-            if raw == 0 { throw .rejected }
-        }
-        #expect(valid.underlying == 42)
-
-        #expect(throws: Validation.rejected) {
-            try Text.Line.Number(0) { (raw: borrowing UInt) throws(Validation) in
-                if raw == 0 { throw .rejected }
-            }
-        }
-    }
-
 }
 
 @Suite
