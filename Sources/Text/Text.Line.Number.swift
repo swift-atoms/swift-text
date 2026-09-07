@@ -12,8 +12,9 @@ extension Text.Line {
 }
 
 #if !hasFeature(Embedded)
-    extension Text.Line.Number: Codable {}
+extension Text.Line.Number: Swift.Codable {}
 #endif
+
 
 extension Text.Line.Number {
 
@@ -32,27 +33,10 @@ extension Text.Line.Number {
     }
 }
 
-extension Text.Line.Number: ExpressibleByIntegerLiteral {
-
-    @_disfavoredOverload
-    @inlinable
-    public init(integerLiteral value: UInt) {
-        self.init(value)
-    }
-}
-
 extension Text.Line.Number {
 
     @inlinable
     public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.underlying < rhs.underlying
-    }
-}
-
-extension Text.Line.Number: CustomStringConvertible {
-
-    @inlinable
-    public var description: Swift.String {
-        "\(underlying)"
     }
 }

@@ -13,8 +13,8 @@ let package = Package(
     ],
     products: [
         .library(name: "Text", targets: ["Text"]),
-        .library(name: "Text Standard Library Integration", targets: ["Text Standard Library Integration"]),
-        .library(name: "Text Foundation Library Integration", targets: ["Text Foundation Library Integration"]),
+
+        .library(name: "Text Foundation Integration", targets: ["Text Foundation Integration"]),
         .library(name: "Text Test Support", targets: ["Text Test Support"]),
     ],
     dependencies: [
@@ -46,27 +46,20 @@ let package = Package(
             ],
             path: "Sources/Text"
         ),
+        
         .target(
-            name: "Text Standard Library Integration",
+            name: "Text Foundation Integration",
             dependencies: [
                 .target(name: "Text"),
             ],
-            path: "Sources/Text Standard Library Integration"
-        ),
-        .target(
-            name: "Text Foundation Library Integration",
-            dependencies: [
-                .target(name: "Text"),
-                .target(name: "Text Standard Library Integration"),
-            ],
-            path: "Sources/Text Foundation Library Integration"
+            path: "Sources/Text Foundation Integration"
         ),
         .target(
             name: "Text Test Support",
             dependencies: [
                 .target(name: "Text"),
-                .product(name: "Cardinal Standard Library Integration", package: "swift-cardinal"),
-                .product(name: "Tagged Standard Library Integration", package: "swift-tagged"),
+                .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(name: "Tagged", package: "swift-tagged"),
             ],
             path: "Tests/Support"
         ),
@@ -79,8 +72,7 @@ let package = Package(
                 .product(name: "Cardinal", package: "swift-cardinal"),
                 .product(name: "Ordinal", package: "swift-ordinal"),
                 .product(name: "Tagged", package: "swift-tagged"),
-                .target(name: "Text Standard Library Integration"),
-                .target(name: "Text Foundation Library Integration"),
+                .target(name: "Text Foundation Integration"),
             ],
             path: "Tests/Text Tests"
         ),
