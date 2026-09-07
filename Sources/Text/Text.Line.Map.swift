@@ -1,10 +1,6 @@
-public import Affine_Carrier
-public import Affine_Discrete
-public import Affine_Tagged
 public import Cardinal
+public import Difference
 public import Ordinal
-public import Ordinal_Protocol
-public import Ordinal_Tagged
 public import Tagged
 
 extension Text.Line {
@@ -65,9 +61,11 @@ extension Text.Line.Map {
         let lineIndex = Int(lineNumber.underlying) - 1
         let lineStart = lineStarts[lineIndex]
 
-        let displacement: Text.Offset = try! offset - lineStart
+        let displacement: Text.Offset = offset - lineStart
 
-        return Text.Line.Column(_unchecked: Cardinal(UInt(displacement.vector.rawValue + 1)))
+        return Text.Line.Column(
+            _unchecked: Cardinal(displacement.difference.magnitude.value.rawValue + 1)
+        )
     }
 
     @inlinable
@@ -76,9 +74,11 @@ extension Text.Line.Map {
         let lineIndex = Int(lineNumber.underlying) - 1
         let lineStart = lineStarts[lineIndex]
 
-        let displacement: Text.Offset = try! offset - lineStart
+        let displacement: Text.Offset = offset - lineStart
 
-        let column = Text.Line.Column(_unchecked: Cardinal(UInt(displacement.vector.rawValue + 1)))
+        let column = Text.Line.Column(
+            _unchecked: Cardinal(displacement.difference.magnitude.value.rawValue + 1)
+        )
         return Text.Location(line: lineNumber, column: column)
     }
 

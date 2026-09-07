@@ -23,7 +23,7 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-atoms/swift-affine.git",
+            url: "https://github.com/swift-atoms/swift-difference.git",
             branch: "main"
         ),
         .package(
@@ -43,16 +43,9 @@ let package = Package(
         .target(
             name: "Text",
             dependencies: [
-                .product(name: "Affine Discrete", package: "swift-affine"),
-                .product(name: "Affine Carrier", package: "swift-affine"),
-                .product(name: "Affine Arithmetic", package: "swift-affine"),
-                .product(name: "Affine Tagged", package: "swift-affine"),
+                .product(name: "Difference", package: "swift-difference"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
-                .product(name: "Cardinal Carrier", package: "swift-cardinal"),
                 .product(name: "Ordinal", package: "swift-ordinal"),
-                .product(name: "Ordinal Protocol", package: "swift-ordinal"),
-                .product(name: "Ordinal Distance", package: "swift-ordinal"),
-                .product(name: "Ordinal Tagged", package: "swift-ordinal"),
                 .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),
@@ -76,16 +69,9 @@ let package = Package(
             dependencies: [
                 .target(name: "Text"),
                 .target(name: "Text Test Support"),
-                .product(name: "Affine Discrete", package: "swift-affine"),
-                .product(name: "Affine Carrier", package: "swift-affine"),
-                .product(name: "Affine Arithmetic", package: "swift-affine"),
-                .product(name: "Affine Tagged", package: "swift-affine"),
+                .product(name: "Difference", package: "swift-difference"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
-                .product(name: "Cardinal Carrier", package: "swift-cardinal"),
                 .product(name: "Ordinal", package: "swift-ordinal"),
-                .product(name: "Ordinal Protocol", package: "swift-ordinal"),
-                .product(name: "Ordinal Distance", package: "swift-ordinal"),
-                .product(name: "Ordinal Tagged", package: "swift-ordinal"),
                 .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),

@@ -1,9 +1,6 @@
-public import Affine_Carrier
-public import Affine_Arithmetic
-public import Affine_Tagged
-public import Cardinal_Carrier
-public import Ordinal_Tagged
-public import Ordinal_Protocol
+public import Cardinal
+public import Difference
+public import Ordinal
 public import Tagged
 
 extension Text.Location {
@@ -36,8 +33,8 @@ extension Text.Location.Tracker {
     @inlinable
     public func location(at cursor: Text.Position) -> Text.Location {
 
-        let offset: Text.Offset = try! cursor - lineStart
-        let bytes: Text.Count = offset.magnitude
+        let offset: Text.Offset = cursor - lineStart
+        let bytes: Text.Count = offset.magnitude.map(\.value)
         let column: Text.Line.Column = bytes + Text.Count.one
         return Text.Location(line: line, column: column)
     }

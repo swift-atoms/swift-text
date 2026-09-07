@@ -1,8 +1,5 @@
-public import Affine_Arithmetic
-public import Affine_Tagged
+public import Difference
 public import Ordinal
-public import Ordinal_Distance
-public import Ordinal_Protocol
 public import Tagged
 
 extension Text {
@@ -23,7 +20,7 @@ extension Text {
         public init(start: Text.Position, count: Text.Count) {
             self.start = start
 
-            self.end = try! start + Text.Offset(count)
+            self.end = try! start.advance.exact(by: count)
         }
     }
 }

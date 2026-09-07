@@ -1,13 +1,6 @@
-import Affine_Arithmetic
-import Affine_Carrier
-import Affine_Discrete
-import Affine_Tagged
+import Difference
 import Cardinal
-import Cardinal_Carrier
 import Ordinal
-import Ordinal_Distance
-import Ordinal_Protocol
-import Ordinal_Tagged
 import Tagged
 import Testing
 import Text_Test_Support
@@ -45,7 +38,7 @@ struct `Text Position Tests` {
     func `subtraction returns typed offset`() throws {
         let a: Text.Position = 25
         let b: Text.Position = 10
-        let offset: Text.Offset = try a - b
+        let offset: Text.Offset = a - b
         #expect(offset == Text.Offset(15))
     }
 
@@ -117,7 +110,7 @@ struct `Text Offset Tests` {
     func `hashable`() {
         let a = Text.Offset(5)
         let b = Text.Offset(5)
-        var set: Set<Text.Offset> = [a, b]
+        let set: Set<Text.Offset> = [a, b]
         #expect(set.count == 1)
     }
 
@@ -125,13 +118,13 @@ struct `Text Offset Tests` {
     func `vector access`() {
         let offset = Text.Offset(42)
 
-        #expect(offset.vector.rawValue == 42)
+        #expect(offset.difference == Difference(42))
     }
 
     @Test
     func `description`() {
-        #expect(Text.Offset(15).description == "Vector(15)")
-        #expect(Text.Offset(-3).description == "Vector(-3)")
+        #expect(Text.Offset(15).description == "15")
+        #expect(Text.Offset(-3).description == "-3")
     }
 }
 
@@ -148,9 +141,9 @@ struct `Text Count Tests` {
     }
 
     @Test
-    func `init from offset`() throws {
+    func `count from offset magnitude`() {
         let offset = Text.Offset(15)
-        let count = try Text.Count(offset)
+        let count: Text.Count = offset.magnitude.map(\.value)
         #expect(count == 15)
     }
 
