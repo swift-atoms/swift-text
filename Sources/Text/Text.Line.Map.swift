@@ -84,8 +84,10 @@ extension Text.Line.Map {
 
     @inlinable
     public func offset(forLine line: Text.Line.Number) -> Text.Position? {
-        let index = Int(line.underlying) - 1
-        guard index >= 0, index < lineStarts.count else { return nil }
+        guard line.underlying > 0, line.underlying <= UInt(lineStarts.count) else {
+            return nil
+        }
+        let index = Int(line.underlying - 1)
         return lineStarts[index]
     }
 }

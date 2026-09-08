@@ -500,4 +500,19 @@ struct `Text line maps validate starts and map positions to lines and columns` {
         #expect(map.offset(forLine: 2) == nil)
     }
 
+    @Test(arguments: [UInt(Int.max), UInt(Int.max) + 1, UInt.max])
+    func `Out of range line numbers return nil throughout the unsigned domain`(_ value: UInt) {
+        let map = lineMap([.zero, 4])
+        #expect(map.offset(forLine: Text.Line.Number(value)) == nil)
+    }
+
+    @Test
+    func `Line start lookups preserve byte positions beyond the signed limit`() {
+        let last = Text.Position(_unchecked: Ordinal(UInt.max))
+        let map = lineMap([.zero, last])
+        #expect(map.offset(forLine: 1) == .zero)
+        #expect(map.offset(forLine: 2) == last)
+        #expect(map.offset(forLine: 3) == nil)
+    }
+
 }
