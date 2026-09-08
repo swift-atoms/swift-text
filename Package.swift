@@ -18,6 +18,8 @@ let package = Package(
         .library(name: "Text Test Support", targets: ["Text Test Support"]),
     ],
     dependencies: [
+
+        .package(url: "https://github.com/swift-atoms/swift-carrier.git", branch: "main"),
         .package(
             url: "https://github.com/swift-atoms/swift-difference.git",
             branch: "main"
@@ -39,6 +41,7 @@ let package = Package(
         .target(
             name: "Text",
             dependencies: [
+                .product(name: "Carrier", package: "swift-carrier"),
                 .product(name: "Difference", package: "swift-difference"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
                 .product(name: "Ordinal", package: "swift-ordinal"),
@@ -75,6 +78,12 @@ let package = Package(
                 .target(name: "Text Foundation Integration"),
             ],
             path: "Tests/Text Tests"
+        ),
+        .testTarget(
+            name: "Consolidated Text Carrier Tests",
+            dependencies: [
+.target(name: "Text"), .product(name: "Carrier", package: "swift-carrier")],
+            path: "Tests/Consolidated swift-text-carrier"
         ),
     ],
     swiftLanguageModes: [.v6]
