@@ -1,4 +1,4 @@
-public import Difference
+public import Interval
 public import Ordinal
 public import Tagged
 
@@ -6,21 +6,17 @@ extension Text {
 
     public struct Range: Sendable, Equatable, Hashable {
 
-        public let start: Text.Position
-
-        public let end: Text.Position
+        @usableFromInline
+        internal let interval: Interval.Discrete<Text.Position>
 
         @inlinable
         public init(start: Text.Position, end: Text.Position) {
-            self.start = start
-            self.end = end
+            self.interval = try! Interval.Discrete(start: start, end: end)
         }
 
         @inlinable
         public init(start: Text.Position, count: Text.Count) {
-            self.start = start
-
-            self.end = try! start.advance.exact(by: count)
+            self.interval = try! Interval.Discrete(start: start, count: count)
         }
     }
 }
@@ -28,18 +24,27 @@ extension Text {
 extension Text.Range {
 
     @inlinable
-    public var count: Text.Count {
+    public var start: Text.Position {
+        interval.start
+    }
 
-        try! start.distance.forward(to: end)
+    @inlinable
+    public var end: Text.Position {
+        interval.end
+    }
+
+    @inlinable
+    public var count: Text.Count {
+        interval.count
     }
 
     @inlinable
     public var isEmpty: Bool {
-        start == end
+        interval.isEmpty
     }
 
     @inlinable
     public func contains(_ position: Text.Position) -> Bool {
-        start <= position && position < end
+        interval.contains(position)
     }
 }

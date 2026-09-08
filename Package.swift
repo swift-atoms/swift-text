@@ -29,6 +29,10 @@ let package = Package(
             branch: "main"
         ),
         .package(
+            url: "https://github.com/swift-atoms/swift-interval.git",
+            branch: "main"
+        ),
+        .package(
             url: "https://github.com/swift-atoms/swift-ordinal.git",
             branch: "main"
         ),
@@ -44,6 +48,7 @@ let package = Package(
                 .product(name: "Carrier", package: "swift-carrier"),
                 .product(name: "Difference", package: "swift-difference"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(name: "Interval", package: "swift-interval"),
                 .product(name: "Ordinal", package: "swift-ordinal"),
                 .product(name: "Tagged", package: "swift-tagged"),
             ],

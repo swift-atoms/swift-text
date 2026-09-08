@@ -1,4 +1,4 @@
-public import Difference
+import Difference
 public import Ordinal
 public import Tagged
 

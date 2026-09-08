@@ -33,8 +33,7 @@ extension Text.Location.Tracker {
     @inlinable
     public func location(at cursor: Text.Position) -> Text.Location {
 
-        let offset: Text.Offset = cursor - lineStart
-        let bytes: Text.Count = offset.magnitude.map(\.value)
+        let bytes = Text.Range(start: lineStart, end: cursor).count
         let column: Text.Line.Column = bytes + Text.Count.one
         return Text.Location(line: line, column: column)
     }

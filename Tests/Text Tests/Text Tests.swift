@@ -3,6 +3,7 @@ import Cardinal
 import Ordinal
 import Tagged
 import Testing
+import Text
 import Text_Test_Support
 
 @Suite
@@ -256,6 +257,204 @@ struct `Text ranges preserve bounds counts and half open membership` {
         #expect(range.isEmpty)
         #expect(range.start == .zero)
         #expect(range.end == .zero)
+    }
+
+    @Test
+    func `Text ranges preserve the full unsigned extent through both constructors`() {
+        let last = Text.Position(_unchecked: Ordinal(UInt.max))
+        let count = Text.Count(_unchecked: Cardinal(UInt.max))
+        let endpoints = Text.Range(start: .zero, end: last)
+        let counted = Text.Range(start: .zero, count: count)
+
+        #expect(endpoints.start == .zero)
+        #expect(endpoints.end == last)
+        #expect(endpoints.count == count)
+        #expect(!endpoints.isEmpty)
+        #expect(endpoints.contains(.zero))
+        #expect(endpoints.contains(Text.Position(_unchecked: Ordinal(UInt.max - 1))))
+        #expect(!endpoints.contains(last))
+        #expect(endpoints == counted)
+        #expect(endpoints.hashValue == counted.hashValue)
+        #expect(Set([endpoints, counted]).count == 1)
+        #expect(endpoints.description == "0..<\(UInt.max)")
+    }
+
+    @Test
+    func `Both text range constructors accept an empty extent at the greatest position`() {
+        let last = Text.Position(_unchecked: Ordinal(UInt.max))
+        let endpoints = Text.Range(start: last, end: last)
+        let counted = Text.Range(start: last, count: .zero)
+
+        #expect(endpoints == counted)
+        #expect(endpoints.start == last)
+        #expect(endpoints.end == last)
+        #expect(endpoints.count == .zero)
+        #expect(endpoints.isEmpty)
+        #expect(!endpoints.contains(last))
+        #expect(!endpoints.contains(Text.Position(_unchecked: Ordinal(UInt.max - 1))))
+        #expect(endpoints.description == "\(UInt.max)..<\(UInt.max)")
+    }
+
+    @Test
+    func `A text range count may end exactly at the greatest position from a nonzero start`() {
+        let count = Text.Count(_unchecked: Cardinal(UInt.max - 1))
+        let range = Text.Range(start: 1, count: count)
+
+        #expect(range.start == 1)
+        #expect(range.end == Text.Position(_unchecked: Ordinal(UInt.max)))
+        #expect(range.count == count)
+        #expect(!range.contains(.zero))
+        #expect(range.contains(1))
+        #expect(!range.contains(range.end))
+    }
+
+    @Test
+    func `Text exports discrete intervals with its position and count domains`() throws {
+        let interval: Interval.Discrete<Text.Position> = try Interval.Discrete(
+            start: 3,
+            count: Text.Count(4)
+        )
+        let count: Text.Count = interval.count
+
+        #expect(interval.start == 3)
+        #expect(interval.end == 7)
+        #expect(count == 4)
+    }
+
+    @Test
+    func `Text range construction enforces the ordered endpoint precondition`() async {
+        await #expect(processExitsWith: .failure) {
+            _ = Text.Range(start: 2, end: 1)
+        }
+    }
+
+    @Test
+    func `Text range construction enforces a representable exclusive endpoint`() async {
+        await #expect(processExitsWith: .failure) {
+            let last = Text.Position(_unchecked: Ordinal(UInt.max))
+            _ = Text.Range(start: last, count: .one)
+        }
+    }
+}
+
+@Suite
+struct `Text location trackers preserve current line byte coordinates and enforce their domain` {
+
+    @Test
+    func `A new text location tracker starts at line one column one`() {
+        let tracker = Text.Location.Tracker()
+
+        #expect(tracker.line == 1)
+        #expect(tracker.lineStart == .zero)
+        #expect(tracker.location(at: .zero) == Text.Location(line: 1, column: 1))
+    }
+
+    @Test
+    func `Text location tracker columns count UTF8 bytes from one`() {
+        let tracker = Text.Location.Tracker()
+        let cursor = Text.Position(_unchecked: Ordinal(UInt("é🦊".utf8.count)))
+
+        #expect(tracker.location(at: cursor) == Text.Location(line: 1, column: 7))
+    }
+
+    @Test
+    func `LF and empty line transitions start the next line after the reported byte`() {
+        var tracker = Text.Location.Tracker()
+        tracker.newline(at: 2)
+
+        #expect(tracker.lineStart == 3)
+        #expect(tracker.location(at: 3) == Text.Location(line: 2, column: 1))
+
+        tracker.newline(at: 3)
+
+        #expect(tracker.lineStart == 4)
+        #expect(tracker.location(at: 4) == Text.Location(line: 3, column: 1))
+        #expect(tracker.location(at: 6) == Text.Location(line: 3, column: 3))
+    }
+
+    @Test
+    func `Text location queries may repeat and move backward within the current line`() {
+        var tracker = Text.Location.Tracker()
+        tracker.newline(at: 4)
+
+        #expect(tracker.location(at: 10) == Text.Location(line: 2, column: 6))
+        #expect(tracker.location(at: 7) == Text.Location(line: 2, column: 3))
+        #expect(tracker.location(at: 7) == Text.Location(line: 2, column: 3))
+        #expect(tracker.location(at: 5) == Text.Location(line: 2, column: 1))
+    }
+
+    @Test
+    func `Public text location tracker state can be restored to an earlier line`() {
+        var tracker = Text.Location.Tracker()
+        let saved = tracker
+        tracker.line = 42
+        tracker.lineStart = 100
+
+        #expect(tracker.location(at: 102) == Text.Location(line: 42, column: 3))
+
+        tracker.line = saved.line
+        tracker.lineStart = saved.lineStart
+
+        #expect(tracker == saved)
+        #expect(tracker.location(at: .zero) == Text.Location(line: 1, column: 1))
+    }
+
+    @Test
+    func `Text location trackers preserve the greatest representable one based column`() {
+        var tracker = Text.Location.Tracker()
+        let beforeLast = Text.Position(_unchecked: Ordinal(UInt.max - 1))
+        let last = Text.Position(_unchecked: Ordinal(UInt.max))
+        let column = Text.Line.Column(_unchecked: Cardinal(UInt.max))
+
+        #expect(tracker.location(at: beforeLast) == Text.Location(line: 1, column: column))
+
+        tracker.lineStart = 1
+
+        #expect(tracker.location(at: last) == Text.Location(line: 1, column: column))
+    }
+
+    @Test
+    func `A text location tracker line can start at the greatest position`() {
+        var tracker = Text.Location.Tracker()
+        tracker.newline(at: Text.Position(_unchecked: Ordinal(UInt.max - 1)))
+        let last = Text.Position(_unchecked: Ordinal(UInt.max))
+
+        #expect(tracker.lineStart == last)
+        #expect(tracker.location(at: last) == Text.Location(line: 2, column: 1))
+    }
+
+    @Test
+    func `Text location queries enforce the current line start precondition`() async {
+        await #expect(processExitsWith: .failure) {
+            var tracker = Text.Location.Tracker()
+            tracker.newline(at: 4)
+            _ = tracker.location(at: 4)
+        }
+    }
+
+    @Test
+    func `Text location queries require a representable one based column`() async {
+        await #expect(processExitsWith: .failure) {
+            let tracker = Text.Location.Tracker()
+            _ = tracker.location(at: Text.Position(_unchecked: Ordinal(UInt.max)))
+        }
+    }
+
+    @Test
+    func `Text location newline transitions require a representable next line start`() async {
+        await #expect(processExitsWith: .failure) {
+            var tracker = Text.Location.Tracker()
+            tracker.newline(at: Text.Position(_unchecked: Ordinal(UInt.max)))
+        }
+    }
+
+    @Test
+    func `Text location newline transitions require a representable next line number`() async {
+        await #expect(processExitsWith: .failure) {
+            var tracker = Text.Location.Tracker()
+            tracker.line = Text.Line.Number(UInt.max)
+            tracker.newline(at: .zero)
+        }
     }
 }
 
