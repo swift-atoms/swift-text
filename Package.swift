@@ -17,7 +17,15 @@ let package = Package(
         .library(name: "Text Foundation Integration", targets: ["Text Foundation Integration"]),
         .library(name: "Text Test Support", targets: ["Text Test Support"]),
     ],
+    traits: [
+        .trait(name: "Casing", description: "Casing integration"),
+
+        .trait(name: "Byte", description: "Byte scanning for text line maps"),
+        .trait(name: "Ownership", description: "Borrowed text representation", enabledTraits: ["Byte"]),
+    ],
     dependencies: [
+        .package(url: "https://github.com/swift-atoms/swift-byte.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-ownership.git", branch: "main"),
 
         .package(url: "https://github.com/swift-atoms/swift-carrier.git", branch: "main"),
         .package(
@@ -45,6 +53,8 @@ let package = Package(
         .target(
             name: "Text",
             dependencies: [
+                .product(name: "Byte", package: "swift-byte", condition: .when(traits: ["Byte", "Ownership"])),
+                .product(name: "Ownership", package: "swift-ownership", condition: .when(traits: ["Ownership"])),
                 .product(name: "Carrier", package: "swift-carrier"),
                 .product(name: "Difference", package: "swift-difference"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
@@ -74,6 +84,8 @@ let package = Package(
         .testTarget(
             name: "Text Tests",
             dependencies: [
+                .product(name: "Byte", package: "swift-byte", condition: .when(traits: ["Byte", "Ownership"])),
+                .product(name: "Ownership", package: "swift-ownership", condition: .when(traits: ["Ownership"])),
                 .target(name: "Text"),
                 .target(name: "Text Test Support"),
                 .product(name: "Difference", package: "swift-difference"),
