@@ -1,4 +1,4 @@
-extension Text.Line.Number: Swift.ExpressibleByIntegerLiteral {
+extension Text.Line.Number: Swift::ExpressibleByIntegerLiteral {
 
     @_disfavoredOverload
     @inlinable

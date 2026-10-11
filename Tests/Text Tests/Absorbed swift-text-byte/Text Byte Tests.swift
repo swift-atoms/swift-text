@@ -8,7 +8,7 @@ import Tagged
 @Suite
 struct `Byte scanning preserves text line starts across newline encodings` {
 
-    private func lineMap(for string: Swift.String) -> Text.Line.Map {
+    private func lineMap(for string: Swift::String) -> Text.Line.Map {
         Text.Line.Map(scanning: string.utf8.map(Byte.init(bitPattern:)))
     }
 

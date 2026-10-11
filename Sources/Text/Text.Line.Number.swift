@@ -12,7 +12,7 @@ extension Text.Line {
 }
 
 #if !hasFeature(Embedded)
-extension Text.Line.Number: Swift.Codable {}
+extension Text.Line.Number: Swift::Codable {}
 #endif
 
 

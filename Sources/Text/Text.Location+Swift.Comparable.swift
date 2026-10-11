@@ -1,7 +1,7 @@
 public import Cardinal
 public import Tagged
 
-extension Text.Location: Swift.Comparable {
+extension Text.Location: Swift::Comparable {
 
     @inlinable
     public static func < (lhs: Self, rhs: Self) -> Bool {

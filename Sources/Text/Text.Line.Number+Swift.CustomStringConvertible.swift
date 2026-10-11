@@ -1,7 +1,7 @@
-extension Text.Line.Number: Swift.CustomStringConvertible {
+extension Text.Line.Number: Swift::CustomStringConvertible {
 
     @inlinable
-    public var description: Swift.String {
+    public var description: Swift::String {
         "\(underlying)"
     }
 }

@@ -2,10 +2,10 @@ public import Cardinal
 public import Tagged
 
 #if !hasFeature(Embedded)
-extension Text.Location: Swift.Codable {
+extension Text.Location: Swift::Codable {
         @usableFromInline
 
-        internal enum CodingKeys: Swift.String, CodingKey {
+        internal enum CodingKeys: Swift::String, CodingKey {
             case line
             case column
         }

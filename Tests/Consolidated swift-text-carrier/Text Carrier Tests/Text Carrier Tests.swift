@@ -28,7 +28,7 @@ struct `Text Line Number Carrier Tests` {
     @Test
     func `Carrier conformance — validating init`() throws {
 
-        enum Validation: Swift.Error, Equatable {
+        enum Validation: Swift::Error, Equatable {
             case rejected
         }
 
