@@ -1,6 +1,3 @@
-public import Cardinal
-public import Tagged
-
 #if !hasFeature(Embedded)
 extension Text.Location: Swift::Codable {
         @usableFromInline
