@@ -1,5 +1,5 @@
 #if !hasFeature(Embedded)
-extension Text.Location: Swift::Codable {
+    extension Text.Location: Swift::Codable {
         @usableFromInline
 
         internal enum CodingKeys: Swift::String, CodingKey {

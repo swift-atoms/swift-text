@@ -24,7 +24,11 @@ extension Text.Location.Tracker {
     @inlinable
     public mutating func newline(at position: Text.Position) {
         line = Text.Line.Number(line.underlying + 1)
-        lineStart = try! position + Text.Offset.one
+        do {
+            lineStart = try position + Text.Offset.one
+        } catch {
+            preconditionFailure("Position after a newline is representable: \(error)")
+        }
     }
 }
 

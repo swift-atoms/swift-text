@@ -1,8 +1,6 @@
 import Carrier
 import Testing
 import Text
-import Text
-import Carrier
 
 @Suite
 struct `Text Line Number Carrier Tests` {

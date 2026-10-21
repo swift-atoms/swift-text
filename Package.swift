@@ -64,11 +64,11 @@ let package = Package(
             ],
             path: "Sources/Text"
         ),
-        
+
         .target(
             name: "Text Foundation Integration",
             dependencies: [
-                .target(name: "Text"),
+                .target(name: "Text")
             ],
             path: "Sources/Text Foundation Integration"
         ),
@@ -98,7 +98,8 @@ let package = Package(
         .testTarget(
             name: "Consolidated Text Carrier Tests",
             dependencies: [
-.target(name: "Text"), .product(name: "Carrier", package: "swift-carrier")],
+                .target(name: "Text"), .product(name: "Carrier", package: "swift-carrier"),
+            ],
             path: "Tests/Consolidated swift-text-carrier"
         ),
     ],
@@ -106,14 +107,15 @@ let package = Package(
 )
 
 for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    target.swiftSettings = (target.swiftSettings ?? []) + [
-        .strictMemorySafety(),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableUpcomingFeature("MemberImportVisibility"),
-        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableUpcomingFeature("InferIsolatedConformances"),
-        .enableExperimentalFeature("Lifetimes"),
-        .treatAllWarnings(as: .error),
-    ]
+    target.swiftSettings =
+        (target.swiftSettings ?? []) + [
+            .strictMemorySafety(),
+            .enableUpcomingFeature("ExistentialAny"),
+            .enableUpcomingFeature("InternalImportsByDefault"),
+            .enableUpcomingFeature("MemberImportVisibility"),
+            .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+            .enableUpcomingFeature("InferIsolatedConformances"),
+            .enableExperimentalFeature("Lifetimes"),
+            .treatAllWarnings(as: .error),
+        ]
 }

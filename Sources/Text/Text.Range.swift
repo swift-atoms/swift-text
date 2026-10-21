@@ -11,12 +11,20 @@ extension Text {
 
         @inlinable
         public init(start: Text.Position, end: Text.Position) {
-            self.interval = try! Interval.Discrete(start: start, end: end)
+            do {
+                self.interval = try Interval.Discrete(start: start, end: end)
+            } catch {
+                preconditionFailure("Text.Range requires start <= end: \(error)")
+            }
         }
 
         @inlinable
         public init(start: Text.Position, count: Text.Count) {
-            self.interval = try! Interval.Discrete(start: start, count: count)
+            do {
+                self.interval = try Interval.Discrete(start: start, count: count)
+            } catch {
+                preconditionFailure("Text.Range requires a representable end: \(error)")
+            }
         }
     }
 }

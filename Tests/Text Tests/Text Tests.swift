@@ -1,5 +1,5 @@
-import Difference
 import Cardinal
+import Difference
 import Ordinal
 import Tagged
 import Testing

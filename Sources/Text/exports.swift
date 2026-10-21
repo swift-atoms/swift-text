@@ -5,9 +5,9 @@
 @_exported public import Tagged
 
 #if Byte
-@_exported public import Byte
+    @_exported public import Byte
 #endif
 
 #if Ownership
-@_exported public import Ownership
+    @_exported public import Ownership
 #endif
