@@ -53,8 +53,8 @@ let package = Package(
         .target(
             name: "Text",
             dependencies: [
-                .product(name: "Byte", package: "swift-byte"),
-                .product(name: "Ownership", package: "swift-ownership"),
+                .product(name: "Byte", package: "swift-byte", condition: .when(traits: ["Byte", "Ownership"])),
+                .product(name: "Ownership", package: "swift-ownership", condition: .when(traits: ["Ownership"])),
                 .product(name: "Carrier", package: "swift-carrier"),
                 .product(name: "Difference", package: "swift-difference"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
