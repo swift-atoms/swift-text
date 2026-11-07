@@ -1,6 +1,7 @@
 public import Interval
 public import Ordinal
 public import Tagged
+import Difference
 
 extension Text {
 
@@ -54,5 +55,13 @@ extension Text.Range {
     @inlinable
     public func contains(_ position: Text.Position) -> Bool {
         interval.contains(position)
+    }
+}
+
+extension Text.Range: Swift::CustomStringConvertible {
+
+    @inlinable
+    public var description: Swift::String {
+        "\(start)..<\(end)"
     }
 }

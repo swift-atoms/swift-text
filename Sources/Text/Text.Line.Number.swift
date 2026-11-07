@@ -39,3 +39,20 @@ extension Text.Line.Number {
         lhs.underlying < rhs.underlying
     }
 }
+
+extension Text.Line.Number: Swift::CustomStringConvertible {
+
+    @inlinable
+    public var description: Swift::String {
+        "\(underlying)"
+    }
+}
+
+extension Text.Line.Number: Swift::ExpressibleByIntegerLiteral {
+
+    @_disfavoredOverload
+    @inlinable
+    public init(integerLiteral value: UInt) {
+        self.init(value)
+    }
+}
