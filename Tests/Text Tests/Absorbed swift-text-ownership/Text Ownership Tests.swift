@@ -7,13 +7,13 @@
     @Suite("Text × Ownership.Borrow")
     struct Text_Ownership_Tests {
 
-        @Test("Text conforms to Ownership.Borrow.Protocol")
-        func borrowProtocolConformance() {
+        @Test
+        func `Text conforms to Ownership.Borrow.Protocol`() {
             requireBorrowProtocol(Text.self)
         }
 
-        @Test("Text's borrowed representation is a read-only byte span")
-        func borrowedRepresentation() {
+        @Test
+        func `Text's borrowed representation is a read-only byte span`() {
             let bytes = [Byte(bitPattern: 0x41), Byte(bitPattern: 0x42)]
             let borrowed: Text.Borrowed = bytes.span
 
