@@ -4,7 +4,7 @@
     import Testing
     import Text
 
-    @Suite("Text × Ownership.Borrow")
+    @Suite
     struct Text_Ownership_Tests {
 
         @Test
