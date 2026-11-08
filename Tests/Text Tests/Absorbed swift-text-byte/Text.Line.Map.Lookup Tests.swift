@@ -2,9 +2,9 @@
     import Testing
     import Text
 
-enum `Text.Line.Map.Lookup Tests` {}
+    enum `Text.Line.Map.Lookup Tests` {}
 
-extension `Text.Line.Map.Lookup Tests` {
+    extension `Text.Line.Map.Lookup Tests` {
         @Suite
         struct `Scanned text line maps reject every out of range line number` {
             @Test(arguments: [UInt.zero, 3, UInt(Int.max), UInt(Int.max) + 1, UInt.max])
@@ -15,5 +15,5 @@ extension `Text.Line.Map.Lookup Tests` {
                 #expect(map.offset(forLine: 2) == Text.Position(1))
             }
         }
-}
+    }
 #endif

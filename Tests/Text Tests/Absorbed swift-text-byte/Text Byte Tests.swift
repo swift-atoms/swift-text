@@ -5,9 +5,9 @@
     import Text
     import Tagged
 
-enum `Text Byte Tests` {}
+    enum `Text Byte Tests` {}
 
-extension `Text Byte Tests` {
+    extension `Text Byte Tests` {
         @Suite
         struct `Byte scanning preserves text line starts across newline encodings` {
 
@@ -93,5 +93,5 @@ extension `Text Byte Tests` {
                 #expect(map.location(for: 12) == Text.Location(line: 2, column: 2))
             }
         }
-}
+    }
 #endif

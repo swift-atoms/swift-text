@@ -1,7 +1,7 @@
+import Difference
 public import Interval
 public import Ordinal
 public import Tagged
-import Difference
 
 extension Text {
 

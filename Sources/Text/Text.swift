@@ -1,7 +1,7 @@
 public import Cardinal
-public import Tagged
 public import Difference
 public import Ordinal
+public import Tagged
 
 public enum Text {}
 
