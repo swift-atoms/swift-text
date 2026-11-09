@@ -13,13 +13,44 @@ extension Text {
         /// Throws ``Error/reversed`` when `end` precedes `start`.
         @inlinable
         public init(start: Text.Position, end: Text.Position) throws(Error) {
-            self.interval = try Interval.Discrete(start: start, end: end)
+            do {
+                self.interval = try Interval.Discrete(start: start, end: end)
+            } catch {
+                throw Error(error)
+            }
         }
 
         /// Throws ``Error/overflow`` when the end `start + count` is not representable.
         @inlinable
         public init(start: Text.Position, count: Text.Count) throws(Error) {
-            self.interval = try Interval.Discrete(start: start, count: count)
+            do {
+                self.interval = try Interval.Discrete(start: start, count: count)
+            } catch {
+                throw Error(error)
+            }
+        }
+    }
+}
+
+extension Text.Range {
+
+    public enum Error: Swift::Error, Hashable, Sendable {
+
+        /// The end precedes the start.
+        case reversed
+
+        /// The end is not representable.
+        case overflow
+    }
+}
+
+extension Text.Range.Error {
+
+    @inlinable
+    init(_ error: Interval.Discrete<Text.Position>.Error) {
+        switch error {
+        case .reversed: self = .reversed
+        case .overflow: self = .overflow
         }
     }
 }

@@ -48,7 +48,7 @@ extension Text.Location.Tracker {
         }
         let column: Cardinal
         do {
-            column = try bytes.underlying.add.exact(Cardinal(1))
+            column = try bytes.underlying.add.exact(.one)
         } catch {
             throw .columnOverflow
         }
