@@ -26,7 +26,7 @@ extension Text.Location.Tracker {
     public mutating func newline(at position: Text.Position) throws(Error) {
         guard line.underlying != UInt.max else { throw .lineNumberOverflow }
         let next: Text.Position
-        do {
+        do throws(Ordinal.Error) {
             next = try position + Text.Offset.one
         } catch {
             throw .lineStartOverflow
@@ -41,13 +41,13 @@ extension Text.Location.Tracker {
     @inlinable
     public func location(at cursor: Text.Position) throws(Error) -> Text.Location {
         let bytes: Text.Count
-        do {
+        do throws(Text.Range.Error) {
             bytes = try Text.Range(start: lineStart, end: cursor).count
         } catch {
             throw .beforeLineStart
         }
         let column: Cardinal
-        do {
+        do throws(Cardinal.Error) {
             column = try bytes.underlying.add.exact(.one)
         } catch {
             throw .columnOverflow
