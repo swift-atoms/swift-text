@@ -10,22 +10,16 @@ extension Text {
         @usableFromInline
         internal let interval: Interval.Discrete<Text.Position>
 
+        /// Throws ``Error/reversed`` when `end` precedes `start`.
         @inlinable
-        public init(start: Text.Position, end: Text.Position) {
-            do {
-                self.interval = try Interval.Discrete(start: start, end: end)
-            } catch {
-                preconditionFailure("Text.Range requires start <= end: \(error)")
-            }
+        public init(start: Text.Position, end: Text.Position) throws(Error) {
+            self.interval = try Interval.Discrete(start: start, end: end)
         }
 
+        /// Throws ``Error/overflow`` when the end `start + count` is not representable.
         @inlinable
-        public init(start: Text.Position, count: Text.Count) {
-            do {
-                self.interval = try Interval.Discrete(start: start, count: count)
-            } catch {
-                preconditionFailure("Text.Range requires a representable end: \(error)")
-            }
+        public init(start: Text.Position, count: Text.Count) throws(Error) {
+            self.interval = try Interval.Discrete(start: start, count: count)
         }
     }
 }

@@ -21,24 +21,37 @@ extension Text.Location {
 
 extension Text.Location.Tracker {
 
+    /// Starts the next line after the newline at `position`; leaves the tracker unchanged when it throws.
     @inlinable
-    public mutating func newline(at position: Text.Position) {
-        line = Text.Line.Number(line.underlying + 1)
+    public mutating func newline(at position: Text.Position) throws(Error) {
+        guard line.underlying != UInt.max else { throw .lineNumberOverflow }
+        let next: Text.Position
         do {
-            lineStart = try position + Text.Offset.one
+            next = try position + Text.Offset.one
         } catch {
-            preconditionFailure("Position after a newline is representable: \(error)")
+            throw .lineStartOverflow
         }
+        line = Text.Line.Number(line.underlying + 1)
+        lineStart = next
     }
 }
 
 extension Text.Location.Tracker {
 
     @inlinable
-    public func location(at cursor: Text.Position) -> Text.Location {
-
-        let bytes = Text.Range(start: lineStart, end: cursor).count
-        let column: Text.Line.Column = bytes + Text.Count.one
-        return Text.Location(line: line, column: column)
+    public func location(at cursor: Text.Position) throws(Error) -> Text.Location {
+        let bytes: Text.Count
+        do {
+            bytes = try Text.Range(start: lineStart, end: cursor).count
+        } catch {
+            throw .beforeLineStart
+        }
+        let column: Cardinal
+        do {
+            column = try bytes.underlying.add.exact(Cardinal(1))
+        } catch {
+            throw .columnOverflow
+        }
+        return Text.Location(line: line, column: Text.Line.Column(_unchecked: column))
     }
 }
